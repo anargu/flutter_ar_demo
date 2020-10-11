@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
-class DemoSreen extends StatefulWidget {
-  DemoSreen({Key key}) : super(key: key);
+class DemoScreen extends StatefulWidget {
+  DemoScreen({Key key}) : super(key: key);
 
   @override
-  _DemoSreenState createState() => _DemoSreenState();
+  _DemoScreenState createState() => _DemoScreenState();
 }
 
-class _DemoSreenState extends State<DemoSreen> {
+class _DemoScreenState extends State<DemoScreen> {
   ArCoreController _controller;
   ArCoreNode cubeNode;
 
@@ -21,13 +21,14 @@ class _DemoSreenState extends State<DemoSreen> {
 
   @override
   Widget build(BuildContext context) {
-    cubeNode.rotation.value.x += 0.001;
+    cubeNode?.rotation?.value?.x += 0.001;
 
     return Container(
       child: ArCoreView(
         type: ArCoreViewType.STANDARDVIEW,
         onArCoreViewCreated: _onArCoreCreated,
         enableTapRecognizer: true,
+        enableUpdateListener: true,
       ),
     );
   }
@@ -37,7 +38,8 @@ class _DemoSreenState extends State<DemoSreen> {
 
     // _addSphere(_controller);
     // _addCylindre(_controller);
-    _addCube(_controller);
+
+    // _addCube(_controller);
     controller.onNodeTap = _onNodeTapped;
     controller.onPlaneDetected = _onPlaneDetected;
   }
@@ -72,7 +74,10 @@ class _DemoSreenState extends State<DemoSreen> {
     controller.addArCoreNode(node);
   }
 
-  void _addCube(ArCoreController controller) {
+  void _addCube(ArCoreController controller, {position}) {
+    if (cubeNode != null) {
+      controller.removeNode(nodeName: cubeNode.name);
+    }
     final material = ArCoreMaterial(
       color: Color.fromARGB(120, 66, 134, 244),
       metallic: 1.0,
@@ -80,13 +85,13 @@ class _DemoSreenState extends State<DemoSreen> {
 
     final cube = ArCoreCube(
       materials: [material],
-      size: vector.Vector3(0.5, 0.5, 0.5),
+      size: vector.Vector3(0.4, 0.4, 0.05),
     );
-
     cubeNode = ArCoreNode(
       shape: cube,
-      position: vector.Vector3(-0.5, 0.5, -3.5),
+      position: position ?? vector.Vector3(-0.5, 0.5, -3.5),
     );
+
     controller.addArCoreNode(cubeNode);
   }
 
@@ -96,5 +101,9 @@ class _DemoSreenState extends State<DemoSreen> {
 
   _onPlaneDetected(ArCorePlane plane) {
     print('hey yo, there is a plane $plane');
+    // plane.centerPose.translation;
+    // plane.centerPose.rotation;
+
+    _addCube(_controller, position: plane.centerPose.translation);
   }
 }

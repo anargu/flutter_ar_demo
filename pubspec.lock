@@ -4,9 +4,9 @@ packages:
   arcore_flutter_plugin:
     dependency: "direct main"
     description:
-      name: arcore_flutter_plugin
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "/home/anargu/dev/flutter/arcore_flutter_plugin/"
+      relative: false
+    source: path
     version: "0.0.6"
   async:
     dependency: transitive
