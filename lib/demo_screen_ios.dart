@@ -21,12 +21,12 @@ class _DemoScreenIOsState3 extends State<DemoScreenIOs> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text('Custom object on plane Sample')),
         body: Container(
           child: ARKitSceneView(
             showFeaturePoints: true,
             planeDetection: ARPlaneDetection.horizontal,
             onARKitViewCreated: onARKitViewCreated,
+            enableTapRecognizer: true,
           ),
         ),
       );
@@ -34,6 +34,7 @@ class _DemoScreenIOsState3 extends State<DemoScreenIOs> {
   void onARKitViewCreated(ARKitController arkitController) {
     this.arkitController = arkitController;
     this.arkitController.onAddNodeForAnchor = _handleAddAnchor;
+    this.arkitController.onNodeTap = _handleNodeTapping;
   }
 
   void _handleAddAnchor(ARKitAnchor anchor) {
@@ -41,6 +42,11 @@ class _DemoScreenIOsState3 extends State<DemoScreenIOs> {
       return;
     }
     _addPlane(arkitController, anchor);
+  }
+
+  _handleNodeTapping(List<String> ids) {
+    Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text('Stormtrooper! ${ids.first} ')));
   }
 
   void _addPlane(ARKitController controller, ARKitPlaneAnchor anchor) {
