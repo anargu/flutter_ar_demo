@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
-class DemoScreen extends StatefulWidget {
-  DemoScreen({Key key}) : super(key: key);
+class DemoScreenAndr extends StatefulWidget {
+  DemoScreenAndr({Key key}) : super(key: key);
 
   @override
-  _DemoScreenState createState() => _DemoScreenState();
+  _DemoScreenAndrState createState() => _DemoScreenAndrState();
 }
 
-class _DemoScreenState extends State<DemoScreen> {
+class _DemoScreenAndrState extends State<DemoScreenAndr> {
   ArCoreController _controller;
   ArCoreNode cubeNode;
+  ArCoreReferenceNode model3d;
 
   @override
   void initState() {
@@ -39,7 +40,6 @@ class _DemoScreenState extends State<DemoScreen> {
     // _addSphere(_controller);
     // _addCylindre(_controller);
 
-    // _addCube(_controller);
     controller.onNodeTap = _onNodeTapped;
     controller.onPlaneDetected = _onPlaneDetected;
   }
@@ -85,7 +85,8 @@ class _DemoScreenState extends State<DemoScreen> {
 
     final cube = ArCoreCube(
       materials: [material],
-      size: vector.Vector3(0.4, 0.4, 0.05),
+      // size: vector.Vector3(0.4, 0.4, 0.05),
+      size: vector.Vector3(0.4, 0.4, 0.4),
     );
     cubeNode = ArCoreNode(
       shape: cube,
@@ -93,6 +94,22 @@ class _DemoScreenState extends State<DemoScreen> {
     );
 
     controller.addArCoreNode(cubeNode);
+  }
+
+  void _add3dObject(ArCoreController controller, {position}) {
+    if (model3d != null) {
+      return;
+    }
+
+    model3d = ArCoreReferenceNode(
+      name: 'object3d',
+      object3DFileName: 'artic_fox.sfb',
+      // for artic_fox
+      scale: vector.Vector3(0.25, 0.25, 0.25),
+      position: position ?? vector.Vector3(-0.5, 0.5, -3.5),
+    );
+
+    controller.addArCoreNodeWithAnchor(model3d);
   }
 
   _onNodeTapped(String nodeName) {
@@ -104,6 +121,7 @@ class _DemoScreenState extends State<DemoScreen> {
     // plane.centerPose.translation;
     // plane.centerPose.rotation;
 
-    _addCube(_controller, position: plane.centerPose.translation);
+    // _addCube(_controller, position: plane.centerPose.translation);
+    _add3dObject(_controller, position: plane.centerPose.translation);
   }
 }

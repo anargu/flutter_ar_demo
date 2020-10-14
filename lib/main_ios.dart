@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ar_demo/demo_screen_andr.dart';
+import 'package:flutter_ar_demo/demo_screen_ios.dart';
 
 void main() {
   runApp(MyApp());
@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: DemoScreenAndr(),
+        child: DemoScreenIOs(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
